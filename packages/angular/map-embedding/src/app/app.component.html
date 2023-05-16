@@ -1,1 +1,48 @@
-<leaflet-map-embedding-nx-welcome></leaflet-map-embedding-nx-welcome>
+<div class="container">
+  <h1>{{title | titlecase}}</h1>
+  <div class="mapContainer">
+    <h5>Selected Map Locations</h5>
+    <table *ngIf="selectedLocations.length > 0">
+      <thead>
+        <tr>
+          <th>Location Id</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let selected of selectedLocations">
+          <td>{{selected.locationId}}</td>
+          <td>{{selected.latitude}}</td>
+          <td>{{selected.longitude}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th id="locHeader" rowspan="2">Location name</th>
+          <th id="coordHeader" colspan="2">Gps Coordinate</th>
+        </tr>
+        <tr>
+          <th id="latHeader">Latitude</th>
+          <th id="longHeader">Longitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let location of locations">
+          <td>
+            <label>
+              <input type="checkbox" id={{location.id}} name={{location.name}} [checked]=location.selected (click)="onLocationSelect(location.id)">
+              {{location.name}}
+            </label>
+          </td>
+          <td>{{location.gpsCoordinate.latitude}}</td>
+          <td>{{location.gpsCoordinate.longitude}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
