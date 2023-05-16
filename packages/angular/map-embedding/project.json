@@ -19,7 +19,10 @@
           "packages/angular/map-embedding/src/favicon.ico",
           "packages/angular/map-embedding/src/assets"
         ],
-        "styles": ["packages/angular/map-embedding/src/styles.css"],
+        "styles": [
+          "packages/angular/map-embedding/src/styles.css",
+          "node_modules/leaflet/dist/leaflet.css"
+        ],
         "scripts": []
       },
       "configurations": {

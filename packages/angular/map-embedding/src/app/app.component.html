@@ -1,24 +1,5 @@
+<h1>{{title | titlecase}}</h1>
 <div class="container">
-  <h1>{{title | titlecase}}</h1>
-  <div class="mapContainer">
-    <h5>Selected Map Locations</h5>
-    <table *ngIf="selectedLocations.length > 0">
-      <thead>
-        <tr>
-          <th>Location Id</th>
-          <th>Latitude</th>
-          <th>Longitude</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let selected of selectedLocations">
-          <td>{{selected.locationId}}</td>
-          <td>{{selected.latitude}}</td>
-          <td>{{selected.longitude}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
   <div>
     <table>
       <thead>
@@ -45,4 +26,5 @@
       </tbody>
     </table>
   </div>
+  <div id="map"></div>
 </div>

@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'leaflet-map-embedding-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'leaflet map embedding';
-  selectedLocations: {locationId: number, latitude: number, longitude: number}[] = [];
+  map: L.Map | null = null;
+  selectedLocations: {locationId: number, latitude: number, longitude: number, marker?: L.Marker}[] = [];
   locations: {
     id: number,
     selected: boolean,
@@ -100,6 +102,14 @@ export class AppComponent {
     }
   ]
 
+  ngOnInit() {
+    this.map = L.map("map").setView([0, 0], 1);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(this.map);
+  }
+
   onLocationSelect = (id: number) => {
     const locationIndex = this.locations.findIndex(loc => loc.id == id)
 
@@ -108,14 +118,36 @@ export class AppComponent {
     }
 
     if(!this.locations[locationIndex].selected) {
-      this.selectedLocations = this.selectedLocations.filter(s => s.locationId != id)
+      this.removeMarkerFromMap(this.selectedLocations.find(s => s.locationId === id));
+      this.selectedLocations = this.selectedLocations.filter(s => s.locationId != id);
       return;
     }
 
     this.selectedLocations.push({
       locationId: id,
       latitude: this.locations[locationIndex].gpsCoordinate.latitude,
-      longitude: this.locations[locationIndex].gpsCoordinate.longitude
+      longitude: this.locations[locationIndex].gpsCoordinate.longitude,
+      marker: this.addMarkerToMap(this.locations[locationIndex].gpsCoordinate.latitude, this.locations[locationIndex].gpsCoordinate.longitude)
     });
+  }
+
+  addMarkerToMap = (latitude: number, longitude: number) => {
+    if(!this.map) {
+      return;
+    }
+
+    return L.marker([latitude, longitude]).addTo(this.map);
+  }
+
+  removeMarkerFromMap = (selectedLocation?: {locationId: number, latitude: number, longitude: number, marker?: L.Marker}) => {
+    if(!this.map || !selectedLocation) {
+      return;
+    }
+
+    const marker = selectedLocation.marker;
+
+    if(marker && this.map.hasLayer(marker)) {
+      this.map.removeLayer(marker);
+    }
   }
 }
