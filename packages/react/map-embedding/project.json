@@ -19,7 +19,9 @@
           "packages/react/map-embedding/src/favicon.ico",
           "packages/react/map-embedding/src/assets"
         ],
-        "styles": ["packages/react/map-embedding/src/styles.css"],
+        "styles": [
+          "packages/react/map-embedding/src/styles.css"
+        ],
         "scripts": [],
         "isolatedConfig": true,
         "webpackConfig": "packages/react/map-embedding/webpack.config.js"
