@@ -1,4 +1,5 @@
 import styles from './map-embedding-react-leaflet.module.css';
+import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 /* eslint-disable-next-line */
@@ -6,18 +7,16 @@ export interface MapEmbeddingReactLeafletProps {}
 
 export function MapEmbeddingReactLeaflet(props: MapEmbeddingReactLeafletProps) {
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Map Embedding React-Leaflet</h1>
-      <div style={{
-        width: '100%',
-        height: '300px'
-      }}>
-        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+      <div className={styles.mapContainer}>
+        <MapContainer center={[0, 0]} zoom={1} scrollWheelZoom={false}>
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            maxZoom={19}
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-          <Marker position={[51.505, -0.09]} >
+          <Marker position={[0, 0]} >
             <Popup>
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
