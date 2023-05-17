@@ -9,7 +9,12 @@ import * as L from 'leaflet';
 export class AppComponent implements OnInit {
   title = 'leaflet map embedding';
   map: L.Map | null = null;
-  selectedLocations: {locationId: number, latitude: number, longitude: number, marker?: L.Marker}[] = [];
+  selectedLocations: {
+    locationId: number,
+    latitude: number,
+    longitude: number,
+    marker?: L.Marker
+  }[] = [];
   locations: {
     id: number,
     selected: boolean,
