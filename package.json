@@ -2,7 +2,12 @@
   "name": "leaflet-map-embedding",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:angular-map-embedding": "nx build angular-map-embedding",
+    "serve:angular-map-embedding": "nx serve angular-map-embedding --port=4200",
+    "build:react-map-embedding": "nx build react-map-embedding",
+    "serve:react-map-embedding": "nx serve react-map-embedding --port=4210"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "~16.0.0",
