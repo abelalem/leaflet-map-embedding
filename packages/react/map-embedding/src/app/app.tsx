@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MapEmbeddingReactLeaflet from './map-embedding-react-leaflet/map-embedding-react-leaflet'
 import MapEmbeddingLeaflet from './map-embedding-leaflet/map-embedding-leaflet'
 
@@ -11,14 +11,14 @@ export function App() {
   }
   const [selectedOption, setSelectedOption] = useState(LeafletOption.reactLeaflet);
   const [selectedLocations, setSelectedLocations] = useState<{
-    locationId: number,
-    latitude: number,
-    longitude: number
+    id: number,
+    name: string;
+    gpsCoordinate: {
+      latitude: number,
+      longitude: number
+    }
   }[]>([]);
-
-
-
-  const locations: {
+  const [locations, setLocations] = useState<{
     id: number
     selected: boolean
     name: string,
@@ -26,7 +26,7 @@ export function App() {
       latitude: number,
       longitude: number
     }
-  }[] = [
+  }[]>([
     {
       id: 1,
       selected: false,
@@ -108,71 +108,71 @@ export function App() {
         longitude: 38.796275
       }
     }
-  ];
+  ]);
 
   const onMapEmbeddingOptionSelect = (event: any) => {
     setSelectedOption(event.target.value);
   }
 
+  const onLocationSelect = (event: any) => {
+    const selectedId = parseInt(event.target.value);
+
+    if(isNaN(selectedId)) {
+      return;
+    }
+
+    const locationIndex = locations.findIndex(l => l.id === selectedId);
+
+    if(locationIndex < 0) {
+      return;
+    }
+
+    locations[locationIndex].selected = !locations[locationIndex].selected;
+
+    setLocations(locations);
+
+    setSelectedLocations(locations.filter(l => l.selected)?.map(l => {
+      return {
+        id: l.id,
+        name: l.name,
+        gpsCoordinate: l.gpsCoordinate
+      }
+    }) ?? []);
+  }
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '2rem'
-    }}>
+    <div className={styles.container}>
       {
         selectedOption === LeafletOption.reactLeaflet ? (
-          <MapEmbeddingReactLeaflet />
+          <MapEmbeddingReactLeaflet locations={selectedLocations} />
         ):(
           <MapEmbeddingLeaflet />
         )
       }
-      <div style={{
-        display: 'flex',
-        gap: '2rem'
-      }}>
+      <div className={styles.mapEmbeddingOptionContainer}>
           <div>
-            <label style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
+            <label className={styles.mapEmbeddingOption}>
               <input type="radio" name="mapEmbeddingOption" value={LeafletOption.reactLeaflet} onClick={onMapEmbeddingOptionSelect} defaultChecked={selectedOption === LeafletOption.reactLeaflet}/>
               <div>Map Embedding using react-leaflet</div>
             </label>
           </div>
           <div>
-            <label style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
+            <label className={styles.mapEmbeddingOPtion}>
               <input type="radio" name="mapEmbeddingOption" value={LeafletOption.leaflet} onClick={onMapEmbeddingOptionSelect} />
               <div>Map Embedding using only leaflet</div>
             </label>
           </div>
       </div>
       <div>
-        <table style={{
-          backgroundColor: '#000'
-        }}>
+        <table className={styles.locationsTable}>
           <thead>
             <tr>
-              <th rowSpan={2} style={{
-                backgroundColor: '#FFF'
-              }}>Location name</th>
-              <th colSpan={2} style={{
-                backgroundColor: '#FFF'
-              }}>Gps Coordinate</th>
+              <th rowSpan={2} className={styles.locationsHeader}>Location name</th>
+              <th colSpan={2} className={styles.locationsHeader}>Gps Coordinate</th>
             </tr>
             <tr>
-              <th style={{
-                backgroundColor: '#FFF'
-              }}>Latitude</th>
-              <th style={{
-                backgroundColor: '#FFF'
-              }}>Longitude</th>
+              <th className={styles.locationsHeader}>Latitude</th>
+              <th className={styles.locationsHeader}>Longitude</th>
             </tr>
           </thead>
           <tbody>
@@ -180,25 +180,16 @@ export function App() {
               locations.map(loc => {
                 return (
                   <tr key={loc.id}>
-                    <td style={{
-                        backgroundColor: '#FFF'
-                      }}
-                    >
+                    <td className={styles.locationsData}>
                       <label>
-                        <input type='checkbox' defaultChecked={loc.selected} />
+                        <input type='checkbox' defaultChecked={loc.selected} value={loc.id} onClick={onLocationSelect}/>
                         {loc.name}
                       </label>
                     </td>
-                    <td style={{
-                        backgroundColor: '#FFF'
-                      }}
-                    >
+                    <td className={styles.locationsData}>
                       {loc.gpsCoordinate.latitude}
                     </td>
-                    <td style={{
-                        backgroundColor: '#FFF'
-                      }}
-                    >
+                    <td className={styles.locationsData}>
                       {loc.gpsCoordinate.longitude}
                     </td>
                   </tr>
